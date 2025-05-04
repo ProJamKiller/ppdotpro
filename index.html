@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Producer Protocol</title>
+  <link
+    rel="icon"
+    href="https://bafybeiep6lakpdpgkwycacc5wn6ji7exi6nvawwxl47mjb4y63ktgjzrve.ipfs.dweb.link?filename=ppfavicon.jpeg"
+    type="image/jpeg"
+  />
+  <style>
+    /* reset & globals */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      width: 100%; height: 100%;
+      background: #111; color: #eee;
+      font-family: 'Segoe UI', sans-serif;
+      overflow: hidden;
+    }
+
+    /* overlay */
+    #overlay {
+      position: fixed; inset: 0;
+      background: #111;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; z-index: 1000;
+    }
+    #intro-image {
+      max-width: 90%; max-height: 90%;
+      transition: opacity 0.5s ease;
+    }
+    #intro-video {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      max-width: 100%; max-height: 100%;
+      display: none;
+    }
+
+    /* main content */
+    .hidden { display: none; }
+    #main-content {
+      opacity: 0; padding: 2rem;
+      height: 100%; overflow-y: auto;
+      animation: fadeIn 1s forwards 0.5s;
+    }
+
+    /* header */
+    header {
+      text-align: center; padding: 2rem 0;
+    }
+    #header-animated {
+      display: block; margin: 1rem auto;
+      width: 80%; max-width: 600px;
+    }
+
+    /* features */
+    .feature {
+      opacity: 0; transform: translateY(20px);
+      margin: 4rem 0; text-align: center;
+    }
+    .feature.show {
+      animation: slideUp 0.8s forwards;
+    }
+
+    /* footer */
+    footer {
+      text-align: center; padding: 2rem 0;
+    }
+
+    /* keyframes */
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+    @keyframes slideUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div id="overlay">
+    <img
+      id="intro-image"
+      src="https://bafybeiht72zvszsyqj6e4ncyy4dx4aqqwu6mb5u5tzvgyfdacmch77ilza.ipfs.dweb.link?filename=boystill.jpeg"
+      alt="Click to begin"
+    />
+    <video
+      id="intro-video"
+      src="https://bafybeidjsayaa3ymnptx5zz5bkcytyf26wtkengz76hgayt4ulxdbg7zwe.ipfs.dweb.link?filename=boyexplodehidef.mp4"
+      playsinline
+    ></video>
+  </div>
+
+  <div id="main-content" class="hidden">
+    <header>
+      <img
+        id="header-static"
+        src="https://bafybeiegxpmjgjddn3feso3cbqzist3ux5v26g67rr367tb2pzgy2xlmrq.ipfs.dweb.link?filename=ppheader2025.png"
+        alt="Producer Protocol"
+      />
+      <img
+        id="header-animated"
+        src="https://bafybeicev5xod3ezylkyndxxfdsul3x2rsi4mvbv5kjkxso2wyuvn2byai.ipfs.dweb.link?filename=ppheaderanimated2025.gif"
+        alt="Animated Logo"
+      />
+    </header>
+
+    <section class="feature">
+      <h2>What is Producer Protocol?</h2>
+      <p>
+        A next-gen platform for tokenized music collaboration, on-chain
+        fan engagement, and decentralized revenue sharing.
+      </p>
+    </section>
+
+    <section class="feature">
+      <h2>Collaborate</h2>
+      <p>
+        Start projects with your fans, mint unique NFTs, and co-create the next
+        big track.
+      </p>
+    </section>
+
+    <section class="feature">
+      <h2>Earn</h2>
+      <p>
+        Reward contributors with tokens, exclusive drops, and governance power.
+      </p>
+    </section>
+
+    <footer>
+      <p>&copy; 2025 Producer Protocol. All rights reserved.</p>
+    </footer>
+  </div>
+
+  <script>
+    const overlay = document.getElementById('overlay');
+    const introImage = document.getElementById('intro-image');
+    const introVideo = document.getElementById('intro-video');
+    const main = document.getElementById('main-content');
+    const features = document.querySelectorAll('.feature');
+
+    overlay.addEventListener('click', () => {
+      introImage.style.opacity = '0';
+      setTimeout(() => {
+        introImage.style.display = 'none';
+        introVideo.style.display = 'block';
+        introVideo.play();
+      }, 500);
+
+      introVideo.onended = () => {
+        overlay.style.display = 'none';
+        document.body.style.overflow = 'auto';
+        main.classList.remove('hidden');
+        features.forEach((f, i) => {
+          setTimeout(() => f.classList.add('show'), i * 300);
+        });
+      };
+    });
+
+    // lazy‐show on scroll
+    window.addEventListener('scroll', () => {
+      features.forEach((f) => {
+        if (f.getBoundingClientRect().top < window.innerHeight * 0.8) {
+          f.classList.add('show');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
