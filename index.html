@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Producer Protocol</title>
-  <!-- Favicon (inlined) -->
-  <link rel="icon" type="image/jpeg" href="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAoHBwgHBgoICAgLCgoLDhgQDg0NDh0VFhEYIx8lJCIfIiEmKzcvJik0KSEiMEExNDk7Pj4+JS5ESUM8SDc9Pjv/2wBDAQoLCw4NDhwQEBw7KCIoOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozv/wAARCAQABAADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFREZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmam5ydnp+goaKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhIlFxEyIygbEHM0KxwRVS0fAVYnLRChYkNOEl8RcYGFiYnKChLebkP/2gAMAwEAAhEDEQA/AN+iiiuo8lp4Tb6Rp9xqGmaC2mkLuJQhuJBcWMIyAMnpxV9C/Z41Pw1Z6W49C0aXUoZbR5yy7y3CQSrAgLkKAM4xnAz+ZJr5dH426eRWegahZgDKEsN+UEgbcnsx6ZOTn90V5ZXSRXVlS6YroEHhmRaRJD5NuMlTgaKqN1J5FY2kfyzDW+DSTTv4x8NPGX1zp3iExXmpNI0lYfz8yF/oK+ofB4Hwp+IdR07SLfRZJby3JEhLMxyoAFBGP8A1qTbeI/hja+Pmkfs/wCIp9lunatzPcTSFpM+3Lk9Bj+Bq/wAZXfFmh2uq6rfVdPuJZ6jyHUbS3PxN5GSRnldWkENy4ySBjHA6CufQR/+Z9D/ALArKKKK8l/9k=" />
+  <!-- Favicon -->
+  <link rel="icon" type="image/jpeg" href="https://bafybeiep6lakpdpgkwycacc5wn6ji7exi6nvawwxl47mjb4y63ktgjzrve.ipfs.dweb.link?filename=ppfavicon.jpeg" />
 
   <style>
     /* ==== Reset & Base ==== */
@@ -15,6 +15,7 @@
       background: #0D0D0D; color: #FFF;
       font-family: Arial, sans-serif;
       overflow-x: hidden;
+      min-height: 100vh;
     }
     img, video { display: block; max-width: 100%; height: auto; }
 
@@ -47,12 +48,17 @@
       display: none;
       opacity: 0;
       transition: opacity 1s ease;
+      min-height: 100vh;
+      position: relative;
     }
     .container {
       max-width: 1200px;
       margin: 0 auto;
       padding: 0 1rem;
       width: 100%;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
 
     /* ==== Header ==== */
@@ -82,23 +88,58 @@
     #features-list {
       display: flex; flex-wrap: wrap;
       justify-content: center; gap: 2rem;
-      margin-bottom: 4rem;
+      margin: 4rem 0;
       perspective: 1000px;
       width: 100%;
+      flex: 1;
     }
     .card {
-      background: #1A1A1A; border-radius: 10px;
-      border: 1px solid #333; padding: 2rem;
-      width: calc(50% - 2rem); min-width: 280px;
+      background: rgba(26, 26, 26, 0.7);
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+      border-radius: 10px;
+      border: 1px solid rgba(51, 51, 51, 0.3);
+      padding: 2rem;
+      width: calc(50% - 2rem);
+      min-width: 280px;
       max-width: 500px;
-      opacity: 0; transform: translateY(50px);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      opacity: 0;
+      transform: translateY(50px);
+      transition: all 0.3s ease;
       box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      position: relative;
+      overflow: hidden;
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border-radius: 10px;
+      padding: 1px;
+      background: linear-gradient(45deg, #00FF85, #1E90FF);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      opacity: 0.5;
     }
     .card:hover {
       transform: translateY(-5px);
+      background: rgba(26, 26, 26, 0.8);
       box-shadow: 0 8px 15px rgba(0,0,0,0.2),
                   0 0 15px rgba(0,255,133,0.2);
+    }
+    .card:hover::before {
+      opacity: 1;
+      animation: borderGlow 2s infinite;
+    }
+    @keyframes borderGlow {
+      0% { opacity: 0.5; }
+      50% { opacity: 1; }
+      100% { opacity: 0.5; }
     }
     .card h3 {
       font-size: clamp(1.25rem, 2vw, 1.5rem);
@@ -123,6 +164,7 @@
       color: #666; 
       font-size: 0.9rem;
       width: 100%;
+      margin-top: auto;
     }
     .jam-killer-link {
       display: block;
