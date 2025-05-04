@@ -25,25 +25,29 @@
       display: flex; align-items: center; justify-content: center;
       flex-direction: column;
       z-index: 10;
+      cursor: pointer;
     }
     #splash-image {
       width: 100%; height: 100%;
-      object-fit: cover; cursor: pointer;
+      object-fit: cover;
+      transition: opacity 0.5s ease;
     }
-    #play-overlay {
-      position: absolute;
-      font-size: 2rem; padding: 0.5rem 1rem;
-      color: #FFF; border: 2px solid #FFF; border-radius: 4px;
-      background: rgba(0,0,0,0.5);
-      cursor: pointer;
+    #splash:hover #splash-image {
+      opacity: 0.8;
     }
     #intro-video {
       position: absolute; inset: 0;
-      object-fit: cover; display: none;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: none;
     }
 
     /* ==== Main Content ==== */
-    #main-content { display: none; }
+    #main-content { 
+      display: none;
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
     .container {
       max-width: 1200px;
       margin: 0 auto;
@@ -71,12 +75,20 @@
       display: flex; flex-wrap: wrap;
       justify-content: center; gap: 2rem;
       margin-bottom: 4rem;
+      perspective: 1000px;
     }
     .card {
       background: #1A1A1A; border-radius: 10px;
       border: 1px solid #333; padding: 2rem;
       width: calc(50% - 2rem); min-width: 280px;
       opacity: 0; transform: translateY(50px);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 15px rgba(0,0,0,0.2),
+                  0 0 15px rgba(0,255,133,0.2);
     }
     .card h3 {
       font-size: 1.5rem; margin-bottom: 0.75rem;
@@ -104,7 +116,6 @@
       .card { width: 100%; max-width: 480px; }
     }
     @media (max-width: 480px) {
-      #play-overlay { font-size: 1.5rem; padding: 0.4rem 0.8rem; }
       .tagline { font-size: 1rem; }
     }
   </style>
@@ -116,7 +127,6 @@
     <img id="splash-image"
          src="https://bafybeiht72zvszsyqj6e4ncyy4dx4aqqwu6mb5u5tzvgyfdacmch77ilza.ipfs.dweb.link?filename=boystill.jpeg"
          alt="Click to play intro" />
-    <div id="play-overlay">▶ Play</div>
     <video id="intro-video"
            src="https://bafybeidjsayaa3ymnptx5zz5bkcytyf26wtkengz76hgayt4ulxdbg7zwe.ipfs.dweb.link?filename=boyexplodehidef.mp4"
            playsinline></video>
@@ -168,57 +178,76 @@
     gsap.registerPlugin(ScrollTrigger);
 
     // Elements
-    const splashImage = document.getElementById('splash-image');
-    const playOverlay = document.getElementById('play-overlay');
-    const introVideo = document.getElementById('intro-video');
     const splash = document.getElementById('splash');
+    const splashImage = document.getElementById('splash-image');
+    const introVideo = document.getElementById('intro-video');
     const mainContent = document.getElementById('main-content');
     const headerAnim = document.getElementById('header-anim');
     const headerStatic = document.getElementById('header-static');
     const tagline = document.querySelector('.tagline');
+    const cards = document.querySelectorAll('.card');
 
-    // Play intro
+    // Play intro on click or scroll
     function startIntro() {
       splashImage.style.display = 'none';
-      playOverlay.style.display = 'none';
       introVideo.style.display = 'block';
       introVideo.play();
     }
-    splashImage.addEventListener('click', startIntro);
-    playOverlay.addEventListener('click', startIntro);
+
+    splash.addEventListener('click', startIntro);
+    document.addEventListener('wheel', startIntro, { once: true });
+    document.addEventListener('touchstart', startIntro, { once: true });
 
     // After video ends
     introVideo.addEventListener('ended', () => {
       splash.style.display = 'none';
       mainContent.style.display = 'block';
+      gsap.to(mainContent, { opacity: 1, duration: 1 });
 
       // Swap header GIF -> static
       setTimeout(() => {
         headerAnim.style.display = 'none';
         headerStatic.style.display = 'block';
-        // Animate tagline in
-        gsap.to(tagline, { opacity: 1, y: 0, duration: 1 });
+        gsap.to(tagline, { 
+          opacity: 1, 
+          y: 0, 
+          duration: 1,
+          ease: 'power2.out'
+        });
       }, 4000);
 
-      // Kick off scroll animations
+      // Initialize scroll animations
       initScrollAnimations();
     });
 
     function initScrollAnimations() {
-      document.querySelectorAll('.card').forEach(card => {
-        gsap.fromTo(card,
-          { y: 50, opacity: 0 },
+      // Create a timeline for staggered card animations
+      const cardTimeline = gsap.timeline({
+        scrollTrigger: {
+          trigger: '#features-list',
+          start: 'top 80%',
+          end: 'bottom 20%',
+          scrub: 1,
+          pin: false
+        }
+      });
+
+      // Add each card to the timeline with a stagger
+      cards.forEach((card, index) => {
+        cardTimeline.fromTo(card,
+          { 
+            y: 100,
+            opacity: 0,
+            rotationX: 15
+          },
           {
             y: 0,
             opacity: 1,
-            duration: 1.2,
-            ease: 'power4.out',
-            scrollTrigger: {
-              trigger: card,
-              start: 'top 85%',
-              toggleActions: 'play none none none'
-            }
-          }
+            rotationX: 0,
+            duration: 1,
+            ease: 'power2.out'
+          },
+          index * 0.2 // Stagger each card by 0.2 seconds
         );
       });
     }
