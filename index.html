@@ -2,171 +2,254 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Producer Protocol</title>
-  <link
-    rel="icon"
-    href="https://bafybeiep6lakpdpgkwycacc5wn6ji7exi6nvawwxl47mjb4y63ktgjzrve.ipfs.dweb.link?filename=ppfavicon.jpeg"
-    type="image/jpeg"
-  />
+  <!-- Favicon -->
+  <link rel="icon" type="image/jpeg" href="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAoHBwgHBgoICAgLCgoLDhgQDg0NDh0VFhEYIx8lJCIfIiEmKzcvJik0KSEiMEExNDk7Pj4+JS5ESUM8SDc9Pjv/2wBDAQoLCw4NDhwQEBw7KCIoOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozv/wAARCAQABAADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFREZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmam5ydnp+goaKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhIlFxEyIygbEHM0KxwRVS0fAVYnLRChYkNOEl8RcYGFiYnKChLebkP/2gAMAwEAAhEDEQA/AN+iiiuo8lp4Tb6Rp9xqGmaC2mkLuJQhuJBcWMIyAMnpxV9C/Z41Pw1Z6W49C0aXUoZbR5yy7y3CQSrAgLkKAM4xnAz+ZJr5dH426eRWegahZgDKEsN+UEgbcnsx6ZOTn90V5ZXSRXVlS6YroEHhmRaRJD5NuMlTgaKqN1J5FY2kfyzDW+DSTTv4x8NPGX1zp3iExXmpNI0lYfz8yF/oK+ofB4Hwp+IdR07SLfRZJby3JEhLMxyoAFBGP8A1qTbeI/hja+Pmkfs/wCIp9lunatzPcTSFpM+3Lk9Bj+Bq/wAZXfFmh2uq6rfVdPuJZ6jyHUbS3PxN5GSRnldWkENy4ySBjHA6CufQR/+Z9D/ALArKKKK8l/9k=" />
   <style>
-    /* reset & globals */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    /* Base Styles and Dark Theme */
     html, body {
+      margin: 0; padding: 0;
+      background: #0D0D0D;  /* dark background (almost black) */
+      color: #FFFFFF;      /* primary text color: white */
+      font-family: Arial, sans-serif;
+      overflow-x: hidden;
+    }
+    /* Links in neon blue */
+    a { color: #1E90FF; }
+    /* Splash (intro) section container */
+    #splash {
+      position: relative;
+      width: 100%; height: 100vh;
+      overflow: hidden;
+      text-align: center;
+      background-color: #000;
+    }
+    #splash img#splash-image {
       width: 100%; height: 100%;
-      background: #111; color: #eee;
-      font-family: 'Segoe UI', sans-serif;
+      object-fit: cover;
+      cursor: pointer;
+    }
+    #splash #play-overlay {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 2em;
+      color: #fff;
+      background: rgba(0,0,0,0.5);
+      padding: 0.5em 1em;
+      border: 2px solid #fff;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #splash video {
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+    /* Hide the video element by default (until play) */
+    #intro-video { display: none; }
+    /* Hide main content initially until intro video is done */
+    #main-content { display: none; }
+    /* Header section */
+    #main-header {
+      background: #0D0D0D;
+      padding: 20px;
+      text-align: center;
+    }
+    #main-header img {
+      max-width: 80%;
+      height: auto;
+    }
+    /* Static header image initially hidden (shown after animation) */
+    #header-static { display: none; }
+    /* General section styling */
+    section {
+      padding: 60px 20px;
+      position: relative;
+      z-index: 1;
+    }
+    /* Introduction section text */
+    #features-intro {
+      text-align: center;
+    }
+    #features-intro h2 {
+      font-size: 2.5em;
+      margin-bottom: 0.5em;
+      /* Glowing neon effect for heading text */
+      text-shadow: 0 0 10px #1E90FF, 0 0 20px #1E90FF;
+    }
+    #features-intro p {
+      font-size: 1.1em;
+      color: #CCC;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    /* Container for feature cards */
+    #features-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+    }
+    .card {
+      background: #1A1A1A;
+      border: 1px solid #333;
+      border-radius: 10px;
+      padding: 20px;
+      width: 300px;
+      max-width: 90%;
+      text-align: center;
+      /* Neon shadow for floating effect */
+      box-shadow: 0 0 15px rgba(0, 255, 133, 0.2);
+      opacity: 0;
+      transform: translateY(50px);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card h3 {
+      font-size: 1.5em;
+      color: #00FF85;  /* neon green accent for titles */
+      text-shadow: 0 0 5px #00FF85, 0 0 10px #00FF85;
+      margin-bottom: 10px;
+    }
+    .card p {
+      color: #DDD;
+      font-size: 1em;
+      line-height: 1.4em;
+    }
+    /* Highlighted keywords in text */
+    .highlight {
+      color: #FF0099;
+      text-shadow: 0 0 5px #FF0099, 0 0 10px #FF0099;
+      font-weight: bold;
+    }
+    /* Hover effect on cards: lift and glow */
+    .card:hover {
+      box-shadow: 0 0 25px rgba(0, 255, 133, 0.5);
+      transform: translateY(-5px);
+    }
+    /* Kinetic text effect (moving text highlight) */
+    .kinetic {
+      display: inline-block;
+      position: relative;
       overflow: hidden;
     }
-
-    /* overlay */
-    #overlay {
-      position: fixed; inset: 0;
-      background: #111;
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer; z-index: 1000;
+    .kinetic::after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0; left: 0;
+      white-space: nowrap;
+      color: #FF0099;
+      /* Reveal the neon text moving across */
+      animation: moveText 5s linear infinite;
     }
-    #intro-image {
-      max-width: 90%; max-height: 90%;
-      transition: opacity 0.5s ease;
-    }
-    #intro-video {
-      position: absolute; top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      max-width: 100%; max-height: 100%;
-      display: none;
-    }
-
-    /* main content */
-    .hidden { display: none; }
-    #main-content {
-      opacity: 0; padding: 2rem;
-      height: 100%; overflow-y: auto;
-      animation: fadeIn 1s forwards 0.5s;
-    }
-
-    /* header */
-    header {
-      text-align: center; padding: 2rem 0;
-    }
-    #header-animated {
-      display: block; margin: 1rem auto;
-      width: 80%; max-width: 600px;
-    }
-
-    /* features */
-    .feature {
-      opacity: 0; transform: translateY(20px);
-      margin: 4rem 0; text-align: center;
-    }
-    .feature.show {
-      animation: slideUp 0.8s forwards;
-    }
-
-    /* footer */
-    footer {
-      text-align: center; padding: 2rem 0;
-    }
-
-    /* keyframes */
-    @keyframes fadeIn {
-      to { opacity: 1; }
-    }
-    @keyframes slideUp {
-      to { opacity: 1; transform: translateY(0); }
+    @keyframes moveText {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-100%); }
     }
   </style>
 </head>
 <body>
-  <div id="overlay">
-    <img
-      id="intro-image"
-      src="https://bafybeiht72zvszsyqj6e4ncyy4dx4aqqwu6mb5u5tzvgyfdacmch77ilza.ipfs.dweb.link?filename=boystill.jpeg"
-      alt="Click to begin"
-    />
-    <video
-      id="intro-video"
-      src="https://bafybeidjsayaa3ymnptx5zz5bkcytyf26wtkengz76hgayt4ulxdbg7zwe.ipfs.dweb.link?filename=boyexplodehidef.mp4"
-      playsinline
-    ></video>
+  <!-- Splash Section: still image and intro video -->
+  <div id="splash">
+    <img id="splash-image" src="https://bafybeiht72zvszsyqj6e4ncyy4dx4aqqwu6mb5u5tzvgyfdacmch77ilza.ipfs.dweb.link?filename=boystill.jpeg" alt="Intro Image" />
+    <div id="play-overlay">▶ Play</div>
+    <video id="intro-video" src="https://bafybeidjsayaa3ymnptx5zz5bkcytyf26wtkengz76hgayt4ulxdbg7zwe.ipfs.dweb.link?filename=boyexplodehidef.mp4" playsinline></video>
   </div>
-
-  <div id="main-content" class="hidden">
-    <header>
-      <img
-        id="header-static"
-        src="https://bafybeiegxpmjgjddn3feso3cbqzist3ux5v26g67rr367tb2pzgy2xlmrq.ipfs.dweb.link?filename=ppheader2025.png"
-        alt="Producer Protocol"
-      />
-      <img
-        id="header-animated"
-        src="https://bafybeicev5xod3ezylkyndxxfdsul3x2rsi4mvbv5kjkxso2wyuvn2byai.ipfs.dweb.link?filename=ppheaderanimated2025.gif"
-        alt="Animated Logo"
-      />
+  <!-- Main Content (hidden initially) -->
+  <div id="main-content">
+    <!-- Header with animated logo -->
+    <header id="main-header">
+      <img id="header-anim" src="https://bafybeicev5xod3ezylkyndxxfdsul3x2rsi4mvbv5kjkxso2wyuvn2byai.ipfs.dweb.link?filename=ppheaderanimated2025.gif" alt="Producer Protocol Animated Header" />
+      <img id="header-static" src="https://bafybeiegxpmjgjddn3feso3cbqzist3ux5v26g67rr367tb2pzgy2xlmrq.ipfs.dweb.link?filename=ppheader2025.png" alt="Producer Protocol Header" />
     </header>
-
-    <section class="feature">
-      <h2>What is Producer Protocol?</h2>
-      <p>
-        A next-gen platform for tokenized music collaboration, on-chain
-        fan engagement, and decentralized revenue sharing.
-      </p>
+    <!-- Introduction Section -->
+    <section id="features-intro">
+      <h2>Welcome to <span class="kinetic" data-text="Producer Protocol">Producer Protocol</span></h2>
+      <p>Revolutionizing music and media production through <span class="highlight">decentralized collaboration</span> and innovation.</p>
     </section>
-
-    <section class="feature">
-      <h2>Collaborate</h2>
-      <p>
-        Start projects with your fans, mint unique NFTs, and co-create the next
-        big track.
-      </p>
+    <!-- Features List Section -->
+    <section id="features-list">
+      <div class="card">
+        <h3>Collaborative Creation</h3>
+        <p>Unprecedented <span class="highlight">music collaboration</span> between artists and producers, powered by blockchain transparency.</p>
+      </div>
+      <div class="card">
+        <h3>Tokenized Content</h3>
+        <p>Immutable <span class="highlight">tokenization</span> of music assets, allowing shared ownership and new monetization streams.</p>
+      </div>
+      <div class="card">
+        <h3>Fan Engagement</h3>
+        <p>Interactive <span class="highlight">fan interaction</span> through voting and contributions, rewarding supporters with tokens and exclusive content.</p>
+      </div>
+      <div class="card">
+        <h3>Decentralized Monetization</h3>
+        <p>Fair, transparent <span class="highlight">decentralized monetization</span> via smart contracts – ensuring artists and collaborators share revenue equitably.</p>
+      </div>
     </section>
-
-    <section class="feature">
-      <h2>Earn</h2>
-      <p>
-        Reward contributors with tokens, exclusive drops, and governance power.
-      </p>
-    </section>
-
-    <footer>
-      <p>&copy; 2025 Producer Protocol. All rights reserved.</p>
-    </footer>
   </div>
-
+  <!-- Scripts: GSAP (animation library) and custom code -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js" crossorigin="anonymous"></script>
   <script>
-    const overlay = document.getElementById('overlay');
-    const introImage = document.getElementById('intro-image');
+    // Register GSAP ScrollTrigger plugin
+    gsap.registerPlugin(ScrollTrigger);
+    // Element references
+    const splashImage = document.getElementById('splash-image');
+    const playOverlay = document.getElementById('play-overlay');
     const introVideo = document.getElementById('intro-video');
-    const main = document.getElementById('main-content');
-    const features = document.querySelectorAll('.feature');
-
-    overlay.addEventListener('click', () => {
-      introImage.style.opacity = '0';
+    const splash = document.getElementById('splash');
+    const mainContent = document.getElementById('main-content');
+    const headerAnim = document.getElementById('header-anim');
+    const headerStatic = document.getElementById('header-static');
+    // Start video on click (either on image or play overlay)
+    function startIntroVideo() {
+      splashImage.style.display = 'none';
+      playOverlay.style.display = 'none';
+      introVideo.style.display = 'block';
+      introVideo.play();
+    }
+    splashImage.addEventListener('click', startIntroVideo);
+    playOverlay.addEventListener('click', startIntroVideo);
+    // When video ends, transition to main site content
+    introVideo.addEventListener('ended', () => {
+      splash.style.display = 'none';       // remove splash section
+      mainContent.style.display = 'block'; // show main content
+      // After a short delay, swap animated header to static header
       setTimeout(() => {
-        introImage.style.display = 'none';
-        introVideo.style.display = 'block';
-        introVideo.play();
-      }, 500);
-
-      introVideo.onended = () => {
-        overlay.style.display = 'none';
-        document.body.style.overflow = 'auto';
-        main.classList.remove('hidden');
-        features.forEach((f, i) => {
-          setTimeout(() => f.classList.add('show'), i * 300);
-        });
-      };
+        headerAnim.style.display = 'none';
+        headerStatic.style.display = 'block';
+      }, 4000);
+      // Initialize scroll-triggered animations now that content is visible
+      initScrollAnimations();
     });
-
-    // lazy‐show on scroll
-    window.addEventListener('scroll', () => {
-      features.forEach((f) => {
-        if (f.getBoundingClientRect().top < window.innerHeight * 0.8) {
-          f.classList.add('show');
-        }
+    // Define scroll-based animations using GSAP
+    function initScrollAnimations() {
+      // Feature cards: fade in and rise up when the section comes into view
+      gsap.to('.card', {
+        scrollTrigger: {
+          trigger: '#features-list',
+          start: 'top 80%',   // start when features section is just above viewport
+          end: 'bottom 20%',
+          scrub: 1           // smooth scrubbing
+        },
+        y: 0,
+        opacity: 1,
+        stagger: 0.2,
+        ease: 'power4.out'
       });
-    });
+      // Parallax effect on cards: slight vertical movement at different speeds
+      gsap.utils.toArray('.card').forEach((card, i) => {
+        gsap.to(card, {
+          scrollTrigger: {
+            trigger: card,
+            start: 'top bottom',  // when each card enters viewport
+            end: 'center center',
+            scrub: true           // element moves with scroll
+          },
+          y: i % 2 === 0 ? -30 : 30  // alternate cards move up or down
+        });
+      });
+    }
   </script>
 </body>
 </html>
