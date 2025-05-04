@@ -52,22 +52,30 @@
       max-width: 1200px;
       margin: 0 auto;
       padding: 0 1rem;
+      width: 100%;
     }
 
     /* ==== Header ==== */
     #main-header {
-      text-align: center; padding: 2rem 0;
+      text-align: center; 
+      padding: 2rem 0;
       background: #0D0D0D;
+      width: 100%;
     }
     #header-anim, #header-static {
-      margin: 0 auto; max-width: 80%;
+      margin: 0 auto; 
+      max-width: 80%;
+      width: 100%;
+      height: auto;
     }
     #header-static { display: none; }
     .tagline {
       opacity: 0; transform: translateY(-20px);
-      font-size: 1.25rem; color: #1E90FF;
+      font-size: clamp(1.5rem, 3vw, 2.5rem);
+      color: #1E90FF;
       text-shadow: 0 0 10px #1E90FF, 0 0 20px #1E90FF;
       margin-top: 1rem;
+      font-weight: bold;
     }
 
     /* ==== Feature Cards ==== */
@@ -76,11 +84,13 @@
       justify-content: center; gap: 2rem;
       margin-bottom: 4rem;
       perspective: 1000px;
+      width: 100%;
     }
     .card {
       background: #1A1A1A; border-radius: 10px;
       border: 1px solid #333; padding: 2rem;
       width: calc(50% - 2rem); min-width: 280px;
+      max-width: 500px;
       opacity: 0; transform: translateY(50px);
       transition: transform 0.3s ease, box-shadow 0.3s ease;
       box-shadow: 0 4px 6px rgba(0,0,0,0.1);
@@ -91,12 +101,14 @@
                   0 0 15px rgba(0,255,133,0.2);
     }
     .card h3 {
-      font-size: 1.5rem; margin-bottom: 0.75rem;
+      font-size: clamp(1.25rem, 2vw, 1.5rem);
+      margin-bottom: 0.75rem;
       color: #00FF85;
       text-shadow: 0 0 5px #00FF85, 0 0 10px #00FF85;
     }
     .card p {
-      font-size: 1rem; line-height: 1.4; color: #DDD;
+      font-size: clamp(0.9rem, 1.5vw, 1rem);
+      line-height: 1.4; color: #DDD;
     }
     .highlight {
       color: #FF0099;
@@ -106,17 +118,43 @@
 
     /* ==== Footer ==== */
     footer {
-      text-align: center; padding: 2rem 0;
-      color: #666; font-size: 0.9rem;
+      text-align: center; 
+      padding: 2rem 0;
+      color: #666; 
+      font-size: 0.9rem;
+      width: 100%;
+    }
+    .jam-killer-link {
+      display: block;
+      margin-top: 1rem;
+      color: #1E90FF;
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s ease;
+    }
+    .jam-killer-link:hover {
+      color: #00FF85;
+      text-shadow: 0 0 5px #00FF85;
     }
 
     /* ==== Responsive Breakpoints ==== */
     @media (max-width: 900px) {
-      #features-list { flex-direction: column; align-items: center; }
-      .card { width: 100%; max-width: 480px; }
+      #features-list { 
+        flex-direction: column; 
+        align-items: center; 
+      }
+      .card { 
+        width: 100%; 
+        max-width: 480px; 
+      }
     }
     @media (max-width: 480px) {
-      .tagline { font-size: 1rem; }
+      .tagline { 
+        font-size: clamp(1.25rem, 2vw, 1.5rem);
+      }
+      .card {
+        padding: 1.5rem;
+      }
     }
   </style>
 </head>
@@ -143,7 +181,7 @@
         <img id="header-static"
              src="https://bafybeiegxpmjgjddn3feso3cbqzist3ux5v26g67rr367tb2pzgy2xlmrq.ipfs.dweb.link?filename=ppheader2025.png"
              alt="Static Logo" />
-        <p class="tagline">The Future Music Economy</p>
+        <p class="tagline">Coming Soon</p>
       </header>
 
       <!-- FEATURE CARDS -->
@@ -167,7 +205,10 @@
       </section>
 
       <!-- FOOTER -->
-      <footer>&copy; 2025 Producer Protocol. All rights reserved.</footer>
+      <footer>
+        &copy; 2025 Producer Protocol. All rights reserved.
+        <a href="https://mobilejamkiller.pro" class="jam-killer-link" target="_blank" rel="noopener">A Jam Killer Joint</a>
+      </footer>
     </div>
   </div>
 
